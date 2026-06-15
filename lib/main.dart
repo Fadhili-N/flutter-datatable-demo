@@ -81,6 +81,7 @@ class _DataTableScreenState extends State<DataTableScreen> {
             const DataColumn(label: Text('Status')),
           ],
           rows: students.map((student) {
+            final bool passed = student['score'] >= 70;
             return DataRow(
               selected: student['selected'],
               onSelectChanged: (isSelected) {
@@ -95,7 +96,26 @@ class _DataTableScreenState extends State<DataTableScreen> {
                   '${student['score']}',
                   style: const TextStyle(fontWeight: FontWeight.bold),
                 )),
-                DataCell(Text('—')),
+                DataCell(
+                  Container(
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 10, vertical: 4),
+                    decoration: BoxDecoration(
+                      color: passed ? Colors.green[100] : Colors.orange[100],
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    child: Text(
+                      passed ? 'Pass' : 'Review',
+                      style: TextStyle(
+                        color: passed
+                            ? Colors.green[800]
+                            : Colors.orange[800],
+                        fontWeight: FontWeight.w600,
+                        fontSize: 12,
+                      ),
+                    ),
+                  ),
+                ),
               ],
             );
           }).toList(),
