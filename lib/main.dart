@@ -81,15 +81,23 @@ class _DataTableScreenState extends State<DataTableScreen> {
             const DataColumn(label: Text('Status')),
           ],
           rows: students.map((student) {
-            return DataRow(cells: [
-              DataCell(Text(student['name'])),
-              DataCell(Text(student['country'])),
-              DataCell(Text(
-                '${student['score']}',
-                style: const TextStyle(fontWeight: FontWeight.bold),
-              )),
-              DataCell(Text('—')),
-            ]);
+            return DataRow(
+              selected: student['selected'],
+              onSelectChanged: (isSelected) {
+                setState(() {
+                  student['selected'] = isSelected ?? false;
+                });
+              },
+              cells: [
+                DataCell(Text(student['name'])),
+                DataCell(Text(student['country'])),
+                DataCell(Text(
+                  '${student['score']}',
+                  style: const TextStyle(fontWeight: FontWeight.bold),
+                )),
+                DataCell(Text('—')),
+              ],
+            );
           }).toList(),
         ),
       ),
