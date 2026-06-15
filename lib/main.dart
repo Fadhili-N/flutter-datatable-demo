@@ -32,6 +32,26 @@ class _DataTableScreenState extends State<DataTableScreen> {
     {'name': 'Fatou',  'country': 'Senegal',  'score': 61, 'selected': false},
   ];
 
+  int sortColumnIndex = 0;
+  bool sortAscending = true;
+
+  void _sort(String key, int columnIndex, bool ascending) {
+    setState(() {
+      sortColumnIndex = columnIndex;
+      sortAscending = ascending;
+      students.sort((a, b) {
+        if (a[key] is int) {
+          return ascending
+              ? (a[key] as int).compareTo(b[key] as int)
+              : (b[key] as int).compareTo(a[key] as int);
+        }
+        return ascending
+            ? (a[key] as String).compareTo(b[key] as String)
+            : (b[key] as String).compareTo(a[key] as String);
+      });
+    });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -42,17 +62,32 @@ class _DataTableScreenState extends State<DataTableScreen> {
       body: Padding(
         padding: const EdgeInsets.all(16.0),
         child: DataTable(
-          columns: const [
-            DataColumn(label: Text('Name')),
-            DataColumn(label: Text('Country')),
-            DataColumn(label: Text('Score'), numeric: true),
-            DataColumn(label: Text('Status')),
+          sortColumnIndex: sortColumnIndex,
+          sortAscending: sortAscending,
+          columns: [
+            DataColumn(
+              label: const Text('Name'),
+              onSort: (i, asc) => _sort('name', i, asc),
+            ),
+            DataColumn(
+              label: const Text('Country'),
+              onSort: (i, asc) => _sort('country', i, asc),
+            ),
+            DataColumn(
+              label: const Text('Score'),
+              numeric: true,
+              onSort: (i, asc) => _sort('score', i, asc),
+            ),
+            const DataColumn(label: Text('Status')),
           ],
           rows: students.map((student) {
             return DataRow(cells: [
               DataCell(Text(student['name'])),
               DataCell(Text(student['country'])),
-              DataCell(Text('${student['score']}')),
+              DataCell(Text(
+                '${student['score']}',
+                style: const TextStyle(fontWeight: FontWeight.bold),
+              )),
               DataCell(Text('—')),
             ]);
           }).toList(),
@@ -60,4 +95,4 @@ class _DataTableScreenState extends State<DataTableScreen> {
       ),
     );
   }
-} 
+}
