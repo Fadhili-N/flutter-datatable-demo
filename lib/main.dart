@@ -61,64 +61,67 @@ class _DataTableScreenState extends State<DataTableScreen> {
       ),
       body: Padding(
         padding: const EdgeInsets.all(16.0),
-        child: DataTable(
-          sortColumnIndex: sortColumnIndex,
-          sortAscending: sortAscending,
-          columns: [
-            DataColumn(
-              label: const Text('Name'),
-              onSort: (i, asc) => _sort('name', i, asc),
-            ),
-            DataColumn(
-              label: const Text('Country'),
-              onSort: (i, asc) => _sort('country', i, asc),
-            ),
-            DataColumn(
-              label: const Text('Score'),
-              numeric: true,
-              onSort: (i, asc) => _sort('score', i, asc),
-            ),
-            const DataColumn(label: Text('Status')),
-          ],
-          rows: students.map((student) {
-            final bool passed = student['score'] >= 70;
-            return DataRow(
-              selected: student['selected'],
-              onSelectChanged: (isSelected) {
-                setState(() {
-                  student['selected'] = isSelected ?? false;
-                });
-              },
-              cells: [
-                DataCell(Text(student['name'])),
-                DataCell(Text(student['country'])),
-                DataCell(Text(
-                  '${student['score']}',
-                  style: const TextStyle(fontWeight: FontWeight.bold),
-                )),
-                DataCell(
-                  Container(
-                    padding: const EdgeInsets.symmetric(
-                        horizontal: 10, vertical: 4),
-                    decoration: BoxDecoration(
-                      color: passed ? Colors.green[100] : Colors.orange[100],
-                      borderRadius: BorderRadius.circular(12),
-                    ),
-                    child: Text(
-                      passed ? 'Pass' : 'Review',
-                      style: TextStyle(
-                        color: passed
-                            ? Colors.green[800]
-                            : Colors.orange[800],
-                        fontWeight: FontWeight.w600,
-                        fontSize: 12,
+        child: SingleChildScrollView(
+          scrollDirection: Axis.horizontal,
+          child: DataTable(
+            sortColumnIndex: sortColumnIndex,
+            sortAscending: sortAscending,
+            columns: [
+              DataColumn(
+                label: const Text('Name'),
+                onSort: (i, asc) => _sort('name', i, asc),
+              ),
+              DataColumn(
+                label: const Text('Country'),
+                onSort: (i, asc) => _sort('country', i, asc),
+              ),
+              DataColumn(
+                label: const Text('Score'),
+                numeric: true,
+                onSort: (i, asc) => _sort('score', i, asc),
+              ),
+              const DataColumn(label: Text('Status')),
+            ],
+            rows: students.map((student) {
+              final bool passed = student['score'] >= 70;
+              return DataRow(
+                selected: student['selected'],
+                onSelectChanged: (isSelected) {
+                  setState(() {
+                    student['selected'] = isSelected ?? false;
+                  });
+                },
+                cells: [
+                  DataCell(Text(student['name'])),
+                  DataCell(Text(student['country'])),
+                  DataCell(Text(
+                    '${student['score']}',
+                    style: const TextStyle(fontWeight: FontWeight.bold),
+                  )),
+                  DataCell(
+                    Container(
+                      padding: const EdgeInsets.symmetric(
+                          horizontal: 10, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: passed ? Colors.green[100] : Colors.orange[100],
+                        borderRadius: BorderRadius.circular(12),
+                      ),
+                      child: Text(
+                        passed ? 'Pass' : 'Review',
+                        style: TextStyle(
+                          color: passed
+                              ? Colors.green[800]
+                              : Colors.orange[800],
+                          fontWeight: FontWeight.w600,
+                          fontSize: 12,
+                        ),
                       ),
                     ),
                   ),
-                ),
-              ],
-            );
-          }).toList(),
+                ],
+              );
+            }).toList(),
+          ),
         ),
       ),
     );
